@@ -1,3 +1,5 @@
+import * as fs from "node:fs";
+
 export class ApiKey {
   endpoint: string;
   token: string;
@@ -29,7 +31,7 @@ export class Config {
 }
 
 function getConfig(): Config {
-  const configJson = process.env.CONFIG!!;
+  const configJson = process.env.CONFIG || fs.readFileSync("config.json", 'utf-8');
   try {
     return JSON.parse(configJson);
   } catch (error) {
