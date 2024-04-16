@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  name: ingress-haidbrx
+spec:
+  rules:
+    - host: haidbrx.shop
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: haidbrx
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - haidbrx.shop
+      secretName: ssl-haidbrx

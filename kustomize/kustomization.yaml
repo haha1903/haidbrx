@@ -1,0 +1,4 @@
+resources:
+  - svc.yaml
+  - deploy.yaml
+  - ing.yaml
