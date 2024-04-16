@@ -30,8 +30,24 @@ export class Config {
 
 function getConfig(): Config {
   const configJson = process.env.CONFIG!!;
-  let config = JSON.parse(configJson);
-  return config;
+  try {
+    return JSON.parse(configJson);
+  } catch (error) {
+    return JSON.parse(`
+    {
+      "apiKey": {
+        "endpoint": "xxx",
+        "token": "xxx"
+      },
+      "userTokens": [
+        {
+          "userId": "xxx",
+          "token": "xxx"
+        }
+      ]
+    }
+    `);
+  }
 }
 
 const config = getConfig();
