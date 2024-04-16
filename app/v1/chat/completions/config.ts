@@ -31,8 +31,8 @@ export class Config {
 }
 
 function getConfig(): Config {
-  const configJson = process.env.CONFIG || fs.readFileSync("config.json", 'utf-8');
   try {
+    const configJson = process.env.CONFIG || fs.readFileSync("config.json", 'utf-8');
     return JSON.parse(configJson);
   } catch (error) {
     return JSON.parse(`
