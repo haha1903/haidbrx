@@ -8,7 +8,7 @@ metadata:
   name: ingress-haidbrx
 spec:
   rules:
-    - host: haidbrx.shop
+    - host: haigpt.shop
       http:
         paths:
           - path: /
@@ -20,5 +20,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - haidbrx.shop
+        - haigpt.shop
       secretName: ssl-haidbrx
