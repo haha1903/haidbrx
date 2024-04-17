@@ -1,5 +1,3 @@
-import * as fs from "node:fs";
-
 export class ApiKey {
   endpoint: string;
   token: string;
@@ -31,11 +29,7 @@ export class Config {
 }
 
 function getConfig(): Config {
-  try {
-    const configJson = process.env.CONFIG || fs.readFileSync("config.json", 'utf-8');
-    return JSON.parse(configJson);
-  } catch (error) {
-    return JSON.parse(`
+  const defaultConfig = `
     {
       "apiKey": {
         "endpoint": "xxx",
@@ -48,7 +42,12 @@ function getConfig(): Config {
         }
       ]
     }
-    `);
+    `;
+  try {
+    let configJson = process.env.CONFIG;
+    return JSON.parse(configJson || defaultConfig);
+  } catch (error) {
+    return JSON.parse(defaultConfig);
   }
 }
 
