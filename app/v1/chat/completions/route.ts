@@ -3,6 +3,44 @@ import config, {ApiKey} from "@/app/v1/chat/completions/config";
 
 const unAuth = NextResponse.json({message: 'Unauthenticated'}, {status: 401});
 
+class Request {
+  stream: boolean = false;
+  temperature: number = 0;
+  messages: Message[] = [];
+  model: string = "gpt-4";
+
+  constructor(body: Request) {
+    this.stream = body.stream;
+    this.temperature = body.temperature;
+    this.messages = body.messages;
+    this.model = body.model;
+  }
+}
+
+class Message {
+  role: string = "";
+  content: string = "";
+}
+
+function ensureValidBody(body: Request): Request {
+  const messages = body.messages;
+  const newMessages: Message[] = [];
+  let lastRole = '';
+
+  for (const message of messages) {
+    if (lastRole === 'user' && message.role === 'user') {
+      newMessages.push({role: 'assistant', content: 'empty'});
+    }
+    newMessages.push(message);
+    lastRole = message.role;
+  }
+
+  return new Request({
+    ...body,
+    messages: newMessages,
+  });
+}
+
 export async function POST(request: NextRequest) {
   let apiKey: ApiKey;
   const apiKeyStr = request.headers.get('authorization')?.replace('Bearer ', '')
@@ -12,7 +50,9 @@ export async function POST(request: NextRequest) {
   } else {
     return unAuth;
   }
-  const body = await request.json();
+  let body: Request = await request.json();
+
+  body = ensureValidBody(body);
 
   return await chat(apiKey, body);
 }
