@@ -1,6 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server';
 import config, {ApiKey} from "@/app/v1/chat/completions/config";
 
+export const runtime = 'edge';
+
 const unAuth = NextResponse.json({message: 'Unauthenticated'}, {status: 401});
 
 class Request {
